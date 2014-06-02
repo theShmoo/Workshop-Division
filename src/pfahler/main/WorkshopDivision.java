@@ -1,11 +1,9 @@
 package pfahler.main;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-import dao.Participant;
-import dao.Workshop;
+import pfahler.main.dao.Participant;
+import pfahler.main.dao.Workshop;
 import pfahler.main.service.WorkshopService;
 import pfahler.main.service.WorkshopServiceImpl;
 
@@ -28,11 +26,24 @@ public class WorkshopDivision {
 	 */
 	public static void main(String[] args) {
 
-		WorkshopService service = new WorkshopServiceImpl();
-		
+		WorkshopService service = WorkshopServiceImpl.getInstance();
+
 		Set<Participant> participants = service.getParticipants();
-		List<Workshop> workshops = service.getWorkshops();
-		service.printFavoriteWorkshops(participants);
+		Set<Workshop> workshops = service.getWorkshops();
+		service.diviseWorkshopsToParticipants(participants, workshops);
+		printParticipants(participants);
+	}
+
+	private static void printParticipants(Set<Participant> participants) {
+		for (Participant p : participants) {
+			String w = "noch nicht eingeteilt";
+			int v = 0;
+			if(p.getWorkshop() != null){
+				w = p.getWorkshop().getName();
+				v = p.getVotes().get(p.getWorkshop());
+			}
+			System.out.printf("Participant = %s (%s), %s (%d)\n", p.getName(),p.getTrupp(), w, v);
+		}
 	}
 
 }

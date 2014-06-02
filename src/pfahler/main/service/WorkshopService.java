@@ -1,10 +1,9 @@
 package pfahler.main.service;
 
-import java.util.List;
 import java.util.Set;
 
-import dao.Participant;
-import dao.Workshop;
+import pfahler.main.dao.Participant;
+import pfahler.main.dao.Workshop;
 
 /**
  * Interface for the service layer of the workshop
@@ -23,12 +22,14 @@ public interface WorkshopService {
 	 * Returns the workshops loaded by the service layer
 	 * @return the workshops loaded by the service layer
 	 */
-	List<Workshop> getWorkshops();
+	Set<Workshop> getWorkshops();
 
 	/**
-	 * Prints the favorite workshops of the participants
+	 * Give each participant a workshop
 	 * @param participants the participants
+	 * @param workshops the workshops
 	 */
-	void printFavoriteWorkshops(Set<Participant> participants);
+	void diviseWorkshopsToParticipants(Set<Participant> participants,
+			Set<Workshop> workshops);
 
 }

@@ -1,12 +1,11 @@
 package pfahler.main.service;
 
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.Map.Entry;
 
-import dao.Participant;
-import dao.Workshop;
+import pfahler.main.dao.Participant;
+import pfahler.main.dao.Workshop;
 import pfahler.main.persistence.CSVLoader;
 import pfahler.main.persistence.PersistanceLoader;
 
@@ -15,16 +14,16 @@ import pfahler.main.persistence.PersistanceLoader;
  * 
  * @author David Pfahler <david@pfahler.at>
  */
-public class WorkshopServiceImpl implements WorkshopService{
-	
+public class WorkshopServiceImpl implements WorkshopService {
+
 	private PersistanceLoader loader;
-	
+	private static WorkshopService service;
+
 	/**
 	 * Initializes the persistence
 	 */
 	public WorkshopServiceImpl() {
-		loader = new CSVLoader(
-				"F:/Local Documents/Workspace/Workshop Division/files/workshops.csv");
+		loader = new CSVLoader("files/workshops.csv");
 	}
 
 	@Override
@@ -33,40 +32,122 @@ public class WorkshopServiceImpl implements WorkshopService{
 	}
 
 	@Override
-	public List<Workshop> getWorkshops() {
+	public Set<Workshop> getWorkshops() {
 		return loader.getWorkshops();
 	}
-	
+
 	/**
 	 * Returns the favorite workshop of the participant
 	 * 
-	 * @param participant the participant
+	 * @param participant
+	 *            the participant
 	 * @return the favorite workshop of the participant
 	 */
-	public Entry<Workshop, Integer> getFavoriteWorkshop(Participant participant) {
-		Map.Entry<Workshop, Integer> bestFit = null;
-		int max = 0;
-		for (Map.Entry<Workshop, Integer> entry : participant.getVotes().entrySet()) {
-			if (entry.getValue() > max) {
-				if (!entry.getKey().isFull()) {
-					max = entry.getValue();
-					bestFit = entry;
-				}
+	public Workshop getFavoriteWorkshop(Participant participant) {
+		Map.Entry<Workshop, Integer> e = getHighestVoteWorkshop(participant);
+		Workshop w = e.getKey();
+		for (Participant p : w.getOrderedInterestedParticipants()) {
+			if (p.getVoteOfWorkshop(w) > e.getValue()) {
+				participant.getVotes().remove(w);
+				return getFavoriteWorkshop(participant);
 			}
 		}
-		if (bestFit == null) {
-			// TODO
+		if (!w.isFull()) {
+			return w;
+		} else {
+			participant.getVotes().remove(w);
+			return getFavoriteWorkshop(participant);
 		}
-		return bestFit;
+	}
+
+	private Map.Entry<Workshop, Integer> getHighestVoteWorkshop(
+			Participant participant) {
+		Map.Entry<Workshop, Integer> best = null;
+		for (Map.Entry<Workshop, Integer> entry : participant.getVotes()
+				.entrySet()) {
+			if (best == null || entry.getValue() > best.getValue()) {
+				best = entry;
+			}
+		}
+		return best;
+	}
+
+	/**
+	 * Returns an instance of the workshop service
+	 * 
+	 * @return an instance of the workshop service
+	 */
+	public static WorkshopService getInstance() {
+		if (service == null) {
+			service = new WorkshopServiceImpl();
+		}
+		return service;
 	}
 
 	@Override
-	public void printFavoriteWorkshops(Set<Participant> participants) {
+	public void diviseWorkshopsToParticipants(Set<Participant> participants,
+			Set<Workshop> workshops) {
+		setInterests(participants);
+		while (participantWithNoWorkshopExists(participants)) {
+			boolean check = false;
+			for (Workshop w : workshops) {
+				if (!w.isFull() && w.isInterest()) {
+					Participant p = w.getOrderedInterestedParticipants().get(0);
+					w.addParticipant(p);
+					p.setWorkshop(w);
+					removeParticipantFromEveryInterestList(p, workshops);
+					check = true;
+				}
+			}
+			if(!check){
+				System.out.println("Cant find workshop for them!");
+				for(Participant p : getParticipantsWithNoWorkshop(participants)){
+					System.out.println(p);
+				}
+				break;
+			}
+		}
+	}
+
+	private Set<Participant> getParticipantsWithNoWorkshop(Set<Participant> participants) {
+		Set<Participant> set = new HashSet<Participant>();
+		for(Participant p : participants){
+			if(p.getWorkshop() == null){
+				set.add(p);
+			}
+		}
+		return set;
+	}
+
+	private boolean participantWithNoWorkshopExists(
+			Set<Participant> participants) {
+		for(Participant p : participants){
+			if(p.getWorkshop() == null){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private void removeParticipantFromEveryInterestList(
+			Participant participant, Set<Workshop> workshops) {
+		for (Workshop w : workshops) {
+			w.getInterestedParticipants().remove(participant);
+		}
+	}
+
+	/**
+	 * Set the interested participants for the workshops
+	 * 
+	 * @param participants
+	 *            the participants
+	 */
+	private void setInterests(Set<Participant> participants) {
 		for (Participant p : participants) {
-			Map.Entry<Workshop, Integer> bestFit = getFavoriteWorkshop(p);
-			System.out.println("Participant = " + p.getName() + ", Key = "
-					+ bestFit.getKey().getName() + ", Value = "
-					+ bestFit.getValue());
+			Set<Workshop> workshops = p.getVotes().keySet();
+			for (Workshop w : workshops) {
+				w.addInterest(p);
+			}
 		}
 	}
 

@@ -1,9 +1,8 @@
-package dao;
+package pfahler.main.dao;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 /**
  * Describes a participant to the workshops who voted
@@ -16,8 +15,7 @@ public class Participant {
 	private String name;
 	private Trupp trupp;
 	private Map<Workshop, Integer> votes;
-	private Workshop workshop1;
-	private Workshop workshop2;
+	private Workshop workshop;
 
 	/**
 	 * Constructor of new participant
@@ -90,5 +88,44 @@ public class Participant {
 	public Map<Workshop, Integer> getVotes() {
 		return votes;
 	}
+
+	/**
+	 * Returns the set workshop
+	 * 
+	 * @return the set workshop
+	 */
+	public Workshop getWorkshop() {
+		return workshop;
+	}
+
+	/**
+	 * Set the workshop that chosen for the participant
+	 * 
+	 * @param workshop
+	 *            the workshop
+	 */
+	public void setWorkshop(Workshop workshop) {
+		this.workshop = workshop;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Participant [name=" + name + ", trupp=" + trupp + ", workshop="
+				+ workshop + "]";
+	}
+
+	/**
+	 * Returns the vote of a workshop of the participant
+	 * @param workshop the workshop
+	 * @return the vote of a workshop of the participant
+	 */
+	public int getVoteOfWorkshop(Workshop workshop) {
+		return votes.get(workshop);
+	}
+	
+	
 
 }

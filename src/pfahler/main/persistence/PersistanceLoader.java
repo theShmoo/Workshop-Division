@@ -3,8 +3,8 @@ package pfahler.main.persistence;
 import java.util.List;
 import java.util.Set;
 
-import dao.Participant;
-import dao.Workshop;
+import pfahler.main.dao.Participant;
+import pfahler.main.dao.Workshop;
 
 /**
  * Interface for the service layer of the workshop
@@ -25,6 +25,6 @@ public interface PersistanceLoader {
 	 * 
 	 * @return the saved workshops
 	 */
-	List<Workshop> getWorkshops();
+	Set<Workshop> getWorkshops();
 
 }

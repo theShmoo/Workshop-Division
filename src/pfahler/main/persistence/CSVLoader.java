@@ -9,10 +9,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import dao.Participant;
-import dao.Trupp;
-import dao.Workshop;
-import pfahler.main.Converter;
+import pfahler.main.dao.Participant;
+import pfahler.main.dao.Trupp;
+import pfahler.main.dao.Workshop;
+import pfahler.main.utils.Converter;
 
 /**
  * Class for loading the data and save it to DAOs
@@ -22,6 +22,7 @@ import pfahler.main.Converter;
 public class CSVLoader implements PersistanceLoader{
 
 	private String csvFile;
+	private Set<Workshop> workshops;
 
 	/**
 	 * Constructor
@@ -53,7 +54,7 @@ public class CSVLoader implements PersistanceLoader{
 	public Set<Participant> getParticipants() {
 
 		Set<Participant> participants = new HashSet<Participant>();
-		List<Workshop> workshops = new ArrayList<Workshop>();
+		List<Workshop> workshopList = new ArrayList<Workshop>();
 
 		BufferedReader br = null;
 		String line = "";
@@ -70,7 +71,7 @@ public class CSVLoader implements PersistanceLoader{
 				for (int i = 0; i < numberOfWorkshops; ++i) {
 					Workshop w = new Workshop();
 					w.setName(entry[i]);
-					workshops.add(w);
+					workshopList.add(w);
 				}
 			}
 			if ((line = br.readLine()) != null) {
@@ -78,7 +79,7 @@ public class CSVLoader implements PersistanceLoader{
 				numberOfWorkshops = entry.length;
 				for (int i = 0; i < numberOfWorkshops; ++i) {
 					int maxPart = Integer.parseInt(entry[i]);
-					workshops.get(i).setMaxParticipants(maxPart);
+					workshopList.get(i).setMaxParticipants(maxPart);
 				}
 			}
 
@@ -93,7 +94,7 @@ public class CSVLoader implements PersistanceLoader{
 				for (int i = 0; i < numberOfWorkshops; ++i) {
 					int vote = Integer.parseInt(entry[3 + i]);
 					if (vote > 0) {
-						participant.addVote(workshops.get(i), vote);
+						participant.addVote(workshopList.get(i), vote);
 					}
 				}
 				participants.add(participant);
@@ -112,7 +113,10 @@ public class CSVLoader implements PersistanceLoader{
 				}
 			}
 		}
-
+		workshops = new HashSet<Workshop>();
+		for(Workshop w : workshopList){
+			workshops.add(w);
+		}
 		return participants;
 	}
 
@@ -133,48 +137,7 @@ public class CSVLoader implements PersistanceLoader{
 	 * 
 	 * @return the workshops
 	 */
-	public List<Workshop> getWorkshops() {
-		List<Workshop> workshops = new ArrayList<Workshop>();
-
-		BufferedReader br = null;
-		String line = "";
-		String cvsSplitBy = ";";
-
-		try {
-			br = new BufferedReader(new FileReader(csvFile));
-			int numberOfWorkshops = 0;
-			// initialize Workshops:
-			if ((line = br.readLine()) != null) {
-				String[] entry = line.split(cvsSplitBy);
-				numberOfWorkshops = entry.length;
-				for (int i = 0; i < numberOfWorkshops; ++i) {
-					Workshop w = new Workshop();
-					w.setName(entry[i]);
-					workshops.add(w);
-				}
-			}
-			if ((line = br.readLine()) != null) {
-				String[] entry = line.split(cvsSplitBy);
-				numberOfWorkshops = entry.length;
-				for (int i = 0; i < numberOfWorkshops; ++i) {
-					int maxPart = Integer.parseInt(entry[i]);
-					workshops.get(i).setMaxParticipants(maxPart);
-				}
-			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			if (br != null) {
-				try {
-					br.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-
+	public Set<Workshop> getWorkshops() {
 		return workshops;
 	}
 }

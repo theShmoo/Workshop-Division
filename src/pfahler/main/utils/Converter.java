@@ -1,6 +1,6 @@
-package pfahler.main;
+package pfahler.main.utils;
 
-import dao.Trupp;
+import pfahler.main.dao.Trupp;
 
 /**
  * Converter class
@@ -18,7 +18,7 @@ public class Converter {
 		switch(string){
 		case "Rauhenstein": 
 			return Trupp.RAUHENSTEIN;
-		case "Raueneck":
+		case "Rauheneck":
 			return Trupp.RAUHENECK;
 		case "Königshöhle":
 			return Trupp.KOENIGSHOEHLE;
