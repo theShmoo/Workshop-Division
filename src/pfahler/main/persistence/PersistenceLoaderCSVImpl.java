@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import pfahler.main.dao.Participant;
 import pfahler.main.dao.Trupp;
@@ -19,7 +21,7 @@ import pfahler.main.utils.Converter;
  * 
  * @author David Pfahler <david@pfahler.at>
  */
-public class CSVLoader implements PersistanceLoader{
+public class PersistenceLoaderCSVImpl implements PersistanceLoader{
 
 	private String csvFile;
 	private Set<Workshop> workshops;
@@ -30,7 +32,7 @@ public class CSVLoader implements PersistanceLoader{
 	 * @param csvFile
 	 *            the path to the csvFile
 	 */
-	public CSVLoader(String csvFile) {
+	public PersistenceLoaderCSVImpl(String csvFile) {
 		this.csvFile = csvFile;
 	}
 
@@ -51,9 +53,9 @@ public class CSVLoader implements PersistanceLoader{
 	 * 
 	 * @return the parsed participants
 	 */
-	public Set<Participant> getParticipants() {
+	public SortedSet<Participant> getParticipants() {
 
-		Set<Participant> participants = new HashSet<Participant>();
+		SortedSet<Participant> participants = new TreeSet<Participant>();
 		List<Workshop> workshopList = new ArrayList<Workshop>();
 
 		BufferedReader br = null;
@@ -88,6 +90,7 @@ public class CSVLoader implements PersistanceLoader{
 				// use comma as separator
 				String[] entry = line.split(cvsSplitBy);
 				Participant participant = new Participant();
+				participant.setTimeOfCreation(Converter.convertStringToDate(entry[0]));
 				participant.setName(entry[1]);
 				Trupp trupp = Converter.convertStringToTrupp(entry[2]);
 				participant.setTrupp(trupp);

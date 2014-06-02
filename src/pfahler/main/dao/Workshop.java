@@ -1,9 +1,10 @@
 package pfahler.main.dao;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * Describes a workshop
@@ -13,15 +14,15 @@ import java.util.Set;
 public class Workshop {
 	private String name;
 	private int maxParticipants;
-	private Set<Participant> participants;
-	private Set<Participant> interestedParticipants;
+	private SortedSet<Participant> participants;
+	private SortedSet<Participant> interestedParticipants;
 
 	/**
 	 * Constructor for a Workshop no fields get set
 	 */
 	public Workshop() {
-		participants = new HashSet<Participant>();
-		interestedParticipants = new HashSet<Participant>();
+		participants = new TreeSet<Participant>();
+		interestedParticipants = new TreeSet<Participant>();
 	}
 
 	/**
@@ -122,12 +123,20 @@ public class Workshop {
 	}
 
 	/**
-	 * Returns true if there are still participants intereseted in this workshop
+	 * Returns true if there are still participants interested in this workshop
 	 * 
-	 * @return true if there are still participants intereseted in this workshop
+	 * @return true if there are still participants interested in this workshop
 	 */
 	public boolean isInterest() {
 		return interestedParticipants.size() > 0;
+	}
+
+	/**
+	 * Resets the participants list and the interested list
+	 */
+	public void reset() {
+		interestedParticipants.clear();
+		participants.clear();
 	}
 
 }

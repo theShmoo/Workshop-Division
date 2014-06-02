@@ -1,7 +1,7 @@
 package pfahler.main.persistence;
 
-import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 
 import pfahler.main.dao.Participant;
 import pfahler.main.dao.Workshop;
@@ -18,7 +18,7 @@ public interface PersistanceLoader {
 	 * 
 	 * @return the saved participants
 	 */
-	Set<Participant> getParticipants();
+	SortedSet<Participant> getParticipants();
 
 	/**
 	 * Returns the saved workshops

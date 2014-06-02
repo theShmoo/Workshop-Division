@@ -1,35 +1,86 @@
 package pfahler.main.service;
 
 import java.util.Set;
+import java.util.SortedSet;
 
 import pfahler.main.dao.Participant;
 import pfahler.main.dao.Workshop;
 
 /**
- * Interface for the service layer of the workshop
+ * Interface for the service layer of the {@link Workshop}
  * 
  * @author David Pfahler <david@pfahler.at>
  */
 public interface WorkshopService {
 
 	/**
-	 * Returns the participants loaded by the service layer
+	 * Returns the {@link Participant}s loaded by the service layer
+	 * 
 	 * @return the participants loaded by the service layer
 	 */
-	Set<Participant> getParticipants();
+	SortedSet<Participant> getParticipants();
 
 	/**
-	 * Returns the workshops loaded by the service layer
+	 * Returns the {@link Workshop}s loaded by the service layer
+	 * 
 	 * @return the workshops loaded by the service layer
 	 */
 	Set<Workshop> getWorkshops();
 
 	/**
-	 * Give each participant a workshop
-	 * @param participants the participants
-	 * @param workshops the workshops
+	 * Give each {@link Participant} a {@link Workshop}
+	 * 
+	 * @param participants
+	 *            the participants
+	 * @param workshops
+	 *            the workshops
 	 */
-	void diviseWorkshopsToParticipants(Set<Participant> participants,
+	void diviseWorkshopsToParticipants(SortedSet<Participant> participants,
 			Set<Workshop> workshops);
+
+	/**
+	 * Returns all {@link Participant}s which don't have a {@link Workshop} yet
+	 * 
+	 * @param participants
+	 *            the participants to check
+	 * @return all participants which don't have a workshop yet
+	 */
+	SortedSet<Participant> getParticipantsWithNoWorkshop(
+			SortedSet<Participant> participants);
+
+	/**
+	 * Check if at least one of the given {@link Participant}s don't have a
+	 * {@link Workshop} yet
+	 * 
+	 * @param participants
+	 *            the participants to check
+	 * @return <code>true</code> if at least one of the given participants don't
+	 *         have a workshop yet
+	 */
+	boolean participantWithNoWorkshopExists(SortedSet<Participant> participants);
+
+	/**
+	 * Set the interested {@link Participant}s for the {@link Workshop}s
+	 * 
+	 * @param participants
+	 *            the participants
+	 */
+	void setInterests(SortedSet<Participant> participants);
+
+	/**
+	 * Remove already chosen {@link Workshop}s from the interest list from the
+	 * workshops
+	 * 
+	 * @param participants
+	 */
+	void removeChosenWorkshopsFromInterests(SortedSet<Participant> participants);
+
+	/**
+	 * Resets the {@link Participant} lists for the {@link Workshop}s
+	 * 
+	 * @param workshops
+	 *            the workshops to get reseted
+	 */
+	void resetWorkshops(Set<Workshop> workshops);
 
 }

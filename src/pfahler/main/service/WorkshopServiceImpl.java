@@ -1,13 +1,13 @@
 package pfahler.main.service;
 
-import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import pfahler.main.dao.Participant;
 import pfahler.main.dao.Workshop;
-import pfahler.main.persistence.CSVLoader;
 import pfahler.main.persistence.PersistanceLoader;
+import pfahler.main.persistence.PersistenceLoaderCSVImpl;
 
 /**
  * Implementation of the workshop service layer
@@ -23,53 +23,17 @@ public class WorkshopServiceImpl implements WorkshopService {
 	 * Initializes the persistence
 	 */
 	public WorkshopServiceImpl() {
-		loader = new CSVLoader("files/workshops.csv");
+		loader = new PersistenceLoaderCSVImpl("files/workshops.csv");
 	}
 
 	@Override
-	public Set<Participant> getParticipants() {
+	public SortedSet<Participant> getParticipants() {
 		return loader.getParticipants();
 	}
 
 	@Override
 	public Set<Workshop> getWorkshops() {
 		return loader.getWorkshops();
-	}
-
-	/**
-	 * Returns the favorite workshop of the participant
-	 * 
-	 * @param participant
-	 *            the participant
-	 * @return the favorite workshop of the participant
-	 */
-	public Workshop getFavoriteWorkshop(Participant participant) {
-		Map.Entry<Workshop, Integer> e = getHighestVoteWorkshop(participant);
-		Workshop w = e.getKey();
-		for (Participant p : w.getOrderedInterestedParticipants()) {
-			if (p.getVoteOfWorkshop(w) > e.getValue()) {
-				participant.getVotes().remove(w);
-				return getFavoriteWorkshop(participant);
-			}
-		}
-		if (!w.isFull()) {
-			return w;
-		} else {
-			participant.getVotes().remove(w);
-			return getFavoriteWorkshop(participant);
-		}
-	}
-
-	private Map.Entry<Workshop, Integer> getHighestVoteWorkshop(
-			Participant participant) {
-		Map.Entry<Workshop, Integer> best = null;
-		for (Map.Entry<Workshop, Integer> entry : participant.getVotes()
-				.entrySet()) {
-			if (best == null || entry.getValue() > best.getValue()) {
-				best = entry;
-			}
-		}
-		return best;
 	}
 
 	/**
@@ -85,9 +49,8 @@ public class WorkshopServiceImpl implements WorkshopService {
 	}
 
 	@Override
-	public void diviseWorkshopsToParticipants(Set<Participant> participants,
+	public void diviseWorkshopsToParticipants(SortedSet<Participant> participants,
 			Set<Workshop> workshops) {
-		setInterests(participants);
 		while (participantWithNoWorkshopExists(participants)) {
 			boolean check = false;
 			for (Workshop w : workshops) {
@@ -109,8 +72,9 @@ public class WorkshopServiceImpl implements WorkshopService {
 		}
 	}
 
-	private Set<Participant> getParticipantsWithNoWorkshop(Set<Participant> participants) {
-		Set<Participant> set = new HashSet<Participant>();
+	@Override
+	public SortedSet<Participant> getParticipantsWithNoWorkshop(SortedSet<Participant> participants) {
+		SortedSet<Participant> set = new TreeSet<Participant>();
 		for(Participant p : participants){
 			if(p.getWorkshop() == null){
 				set.add(p);
@@ -119,8 +83,9 @@ public class WorkshopServiceImpl implements WorkshopService {
 		return set;
 	}
 
-	private boolean participantWithNoWorkshopExists(
-			Set<Participant> participants) {
+	@Override
+	public boolean participantWithNoWorkshopExists(
+			SortedSet<Participant> participants) {
 		for(Participant p : participants){
 			if(p.getWorkshop() == null){
 				return true;
@@ -136,18 +101,29 @@ public class WorkshopServiceImpl implements WorkshopService {
 		}
 	}
 
-	/**
-	 * Set the interested participants for the workshops
-	 * 
-	 * @param participants
-	 *            the participants
-	 */
-	private void setInterests(Set<Participant> participants) {
+	@Override
+	public void setInterests(SortedSet<Participant> participants) {
 		for (Participant p : participants) {
 			Set<Workshop> workshops = p.getVotes().keySet();
 			for (Workshop w : workshops) {
 				w.addInterest(p);
 			}
+		}
+	}
+
+	@Override
+	public void removeChosenWorkshopsFromInterests(
+			SortedSet<Participant> participants) {
+		for(Participant p : participants){
+			if(p.getWorkshop() != null)
+				p.getWorkshop().getInterestedParticipants().remove(p);
+		}
+	}
+
+	@Override
+	public void resetWorkshops(Set<Workshop> workshops) {
+		for(Workshop w : workshops){
+			w.reset();
 		}
 	}
 

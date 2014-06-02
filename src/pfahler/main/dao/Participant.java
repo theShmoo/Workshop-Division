@@ -9,7 +9,7 @@ import java.util.Map;
  * 
  * @author David Pfahler <david@pfahler.at>
  */
-public class Participant {
+public class Participant implements Comparable<Participant> {
 
 	private Date timeOfCreation;
 	private String name;
@@ -124,6 +124,11 @@ public class Participant {
 	 */
 	public int getVoteOfWorkshop(Workshop workshop) {
 		return votes.get(workshop);
+	}
+
+	@Override
+	public int compareTo(Participant o) {
+		return this.getTimeOfCreation().compareTo(o.getTimeOfCreation());
 	}
 	
 	
