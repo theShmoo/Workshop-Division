@@ -31,14 +31,10 @@ public class WorkshopDivision {
 		Set<Workshop> workshops = service.getWorkshops();
 		
 		System.out.println("Day 1:");
-		service.setInterests(participants);
 		service.diviseWorkshopsToParticipants(participants, workshops);
 		printParticipants(participants);
 		
-		System.out.println("Day 2:");
-		service.resetWorkshops(workshops);
-		service.setInterests(participants);
-		service.removeChosenWorkshopsFromInterests(participants);
+		System.out.println("Day 2:");	
 		service.diviseWorkshopsToParticipants(participants, workshops);
 		printParticipants(participants);
 		

@@ -51,6 +51,9 @@ public class WorkshopServiceImpl implements WorkshopService {
 	@Override
 	public void diviseWorkshopsToParticipants(SortedSet<Participant> participants,
 			Set<Workshop> workshops) {
+		resetWorkshops(workshops);
+		setInterests(participants);
+		removeChosenWorkshopsFromInterests(participants);
 		while (participantWithNoWorkshopExists(participants)) {
 			boolean check = false;
 			for (Workshop w : workshops) {
@@ -63,9 +66,9 @@ public class WorkshopServiceImpl implements WorkshopService {
 				}
 			}
 			if(!check){
-				System.out.println("Cant find workshop for them!");
+				System.err.println("Cant find workshop for them!");
 				for(Participant p : getParticipantsWithNoWorkshop(participants)){
-					System.out.println(p);
+					System.err.println(p);
 				}
 				break;
 			}
@@ -117,6 +120,7 @@ public class WorkshopServiceImpl implements WorkshopService {
 		for(Participant p : participants){
 			if(p.getWorkshop() != null)
 				p.getWorkshop().getInterestedParticipants().remove(p);
+			p.setWorkshop(null);
 		}
 	}
 
