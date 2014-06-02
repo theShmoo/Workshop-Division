@@ -1,4 +1,4 @@
-package pfahler.main.dao;
+package at.pfahler.workshop.main.dao;
 
 /**
  * The trupp of a child

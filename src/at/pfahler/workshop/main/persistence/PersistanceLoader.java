@@ -1,10 +1,10 @@
-package pfahler.main.persistence;
+package at.pfahler.workshop.main.persistence;
 
 import java.util.Set;
 import java.util.SortedSet;
 
-import pfahler.main.dao.Participant;
-import pfahler.main.dao.Workshop;
+import at.pfahler.workshop.main.dao.Participant;
+import at.pfahler.workshop.main.dao.Workshop;
 
 /**
  * Interface for the service layer of the workshop

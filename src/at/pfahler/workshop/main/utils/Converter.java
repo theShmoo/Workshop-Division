@@ -1,11 +1,11 @@
-package pfahler.main.utils;
+package at.pfahler.workshop.main.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import pfahler.main.dao.Trupp;
+import at.pfahler.workshop.main.dao.Trupp;
 
 /**
  * Converter class

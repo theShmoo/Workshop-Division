@@ -1,12 +1,12 @@
-package pfahler.main;
+package at.pfahler.workshop.main;
 
 import java.util.Set;
 import java.util.SortedSet;
 
-import pfahler.main.dao.Participant;
-import pfahler.main.dao.Workshop;
-import pfahler.main.service.WorkshopService;
-import pfahler.main.service.WorkshopServiceImpl;
+import at.pfahler.workshop.main.dao.Participant;
+import at.pfahler.workshop.main.dao.Workshop;
+import at.pfahler.workshop.main.service.WorkshopService;
+import at.pfahler.workshop.main.service.WorkshopServiceImpl;
 
 /**
  * The main class of the project

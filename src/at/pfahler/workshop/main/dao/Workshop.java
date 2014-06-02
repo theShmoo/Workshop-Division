@@ -1,4 +1,4 @@
-package pfahler.main.dao;
+package at.pfahler.workshop.main.dao;
 
 import java.util.ArrayList;
 import java.util.List;

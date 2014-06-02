@@ -1,10 +1,10 @@
-package pfahler.main.service;
+package at.pfahler.workshop.main.service;
 
 import java.util.Set;
 import java.util.SortedSet;
 
-import pfahler.main.dao.Participant;
-import pfahler.main.dao.Workshop;
+import at.pfahler.workshop.main.dao.Participant;
+import at.pfahler.workshop.main.dao.Workshop;
 
 /**
  * Interface for the service layer of the {@link Workshop}

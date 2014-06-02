@@ -1,13 +1,13 @@
-package pfahler.main.service;
+package at.pfahler.workshop.main.service;
 
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import pfahler.main.dao.Participant;
-import pfahler.main.dao.Workshop;
-import pfahler.main.persistence.PersistanceLoader;
-import pfahler.main.persistence.PersistenceLoaderCSVImpl;
+import at.pfahler.workshop.main.dao.Participant;
+import at.pfahler.workshop.main.dao.Workshop;
+import at.pfahler.workshop.main.persistence.PersistanceLoader;
+import at.pfahler.workshop.main.persistence.PersistenceLoaderCSVImpl;
 
 /**
  * Implementation of the workshop service layer

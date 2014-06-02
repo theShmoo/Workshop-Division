@@ -1,4 +1,4 @@
-package pfahler.main.persistence;
+package at.pfahler.workshop.main.persistence;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -11,10 +11,10 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import pfahler.main.dao.Participant;
-import pfahler.main.dao.Trupp;
-import pfahler.main.dao.Workshop;
-import pfahler.main.utils.Converter;
+import at.pfahler.workshop.main.dao.Participant;
+import at.pfahler.workshop.main.dao.Trupp;
+import at.pfahler.workshop.main.dao.Workshop;
+import at.pfahler.workshop.main.utils.Converter;
 
 /**
  * Class for loading the data and save it to DAOs
