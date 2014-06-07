@@ -61,7 +61,7 @@ public class Workshop {
 	 * @return <code>true</code> if the workshop has no places left
 	 */
 	public boolean isFull() {
-		return participants.size() > maxParticipants;
+		return participants.size() >= maxParticipants;
 	}
 
 	/**
@@ -137,6 +137,14 @@ public class Workshop {
 	public void reset() {
 		interestedParticipants.clear();
 		participants.clear();
+	}
+
+	/**
+	 * Returns the participants of the workshop
+	 * @return the participants of the workshop
+	 */
+	public Set<Participant> getParticipants() {
+		return participants;
 	}
 
 }

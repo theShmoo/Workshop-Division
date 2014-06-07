@@ -29,15 +29,17 @@ public class WorkshopDivision {
 
 		SortedSet<Participant> participants = service.getParticipants();
 		Set<Workshop> workshops = service.getWorkshops();
-		
+
 		System.out.println("Day 1:");
 		service.diviseWorkshopsToParticipants(participants, workshops);
 		printParticipants(participants);
-		
-		System.out.println("Day 2:");	
+		printWorkshops(workshops);
+
+		System.out.println("Day 2:");
 		service.diviseWorkshopsToParticipants(participants, workshops);
 		printParticipants(participants);
-		
+		printWorkshops(workshops);
+
 	}
 
 	/**
@@ -46,7 +48,11 @@ public class WorkshopDivision {
 	 * @param participants
 	 *            the participants to print
 	 */
-	private static void printParticipants(Set<Participant> participants) {
+	private static void printParticipants(SortedSet<Participant> participants) {
+		System.out.printf("%-25s%-20s%-38s%-4s\n", "Name", "Trupp", "Workshop",
+				"Vote");
+		System.out
+				.println("----------------------------------------------------------------------------------------");
 		for (Participant p : participants) {
 			String w = "noch nicht eingeteilt";
 			int v = 0;
@@ -54,8 +60,20 @@ public class WorkshopDivision {
 				w = p.getWorkshop().getName();
 				v = p.getVotes().get(p.getWorkshop());
 			}
-			System.out.printf("Participant = %s (%s), %s (%d)\n", p.getName(),
+			System.out.printf("%-25s%-20s%-38s(%d)\n", p.getName(),
 					p.getTrupp(), w, v);
+		}
+	}
+
+	private static void printWorkshops(Set<Workshop> workshops) {
+		for (Workshop w : workshops) {
+			Set<Participant> participants = w.getParticipants();
+			System.out.printf("Workshop: %s (%d/%d)\n", w.getName(),
+					participants.size(), w.getMaxParticipants());
+			for (Participant p : participants) {
+				System.out.printf("\t%-20s %-15s (%d)\n", p.getName(),
+						p.getTrupp(), p.getVoteOfWorkshop(w));
+			}
 		}
 	}
 

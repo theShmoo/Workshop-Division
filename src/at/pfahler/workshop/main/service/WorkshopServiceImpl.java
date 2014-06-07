@@ -1,5 +1,8 @@
 package at.pfahler.workshop.main.service;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -49,8 +52,8 @@ public class WorkshopServiceImpl implements WorkshopService {
 	}
 
 	@Override
-	public void diviseWorkshopsToParticipants(SortedSet<Participant> participants,
-			Set<Workshop> workshops) {
+	public void diviseWorkshopsToParticipants(
+			SortedSet<Participant> participants, Set<Workshop> workshops) {
 		resetWorkshops(workshops);
 		setInterests(participants);
 		removeChosenWorkshopsFromInterests(participants);
@@ -58,28 +61,72 @@ public class WorkshopServiceImpl implements WorkshopService {
 			boolean check = false;
 			for (Workshop w : workshops) {
 				if (!w.isFull() && w.isInterest()) {
-					Participant p = w.getOrderedInterestedParticipants().get(0);
+					int i = 0;
+					Participant p = w.getOrderedInterestedParticipants().get(i);
+					while (isMoreInterestedInDifferentWorkshop(p, w)) {
+						List<Participant> parts = w
+								.getOrderedInterestedParticipants();
+						if (++i < parts.size()) {
+							p = parts.get(i);
+						} else {
+							// no fit so take the best fit for the workshop
+							p = w.getOrderedInterestedParticipants().get(0);
+							break;
+						}
+					}
 					w.addParticipant(p);
 					p.setWorkshop(w);
 					removeParticipantFromEveryInterestList(p, workshops);
 					check = true;
+
 				}
 			}
-			if(!check){
-				System.err.println("Cant find workshop for them!");
-				for(Participant p : getParticipantsWithNoWorkshop(participants)){
-					System.err.println(p);
+			if (!check) {
+				System.err
+						.println("Cant find a workshop for these participants:");
+				for (Participant p : getParticipantsWithNoWorkshop(participants)) {
+					System.err.printf("%-25s %-20s\n",
+							p.getName(), p.getTrupp());
 				}
+				System.err.println("Free Workshops:");
+				for (Workshop free : getFreeWorkshops(workshops)) {
+					System.err.printf("%s (%d/%d), ", free.getName(), free
+							.getParticipants().size(), free
+							.getMaxParticipants());
+				}
+				System.err.print("\n");
 				break;
 			}
 		}
 	}
 
+	private Set<Workshop> getFreeWorkshops(Set<Workshop> workshops) {
+		Set<Workshop> set = new HashSet<Workshop>();
+		for(Workshop w : workshops){
+			if(!w.isFull()){
+				set.add(w);
+			}
+		}
+		return set;
+	}
+
+	private boolean isMoreInterestedInDifferentWorkshop(Participant p,
+			Workshop w) {
+		int vote = p.getVoteOfWorkshop(w);
+		for (Map.Entry<Workshop, Integer> e : p.getVotes().entrySet()) {
+			if (e.getValue() > vote) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	@Override
-	public SortedSet<Participant> getParticipantsWithNoWorkshop(SortedSet<Participant> participants) {
+	public SortedSet<Participant> getParticipantsWithNoWorkshop(
+			SortedSet<Participant> participants) {
 		SortedSet<Participant> set = new TreeSet<Participant>();
-		for(Participant p : participants){
-			if(p.getWorkshop() == null){
+		for (Participant p : participants) {
+			if (p.getWorkshop() == null) {
 				set.add(p);
 			}
 		}
@@ -89,8 +136,8 @@ public class WorkshopServiceImpl implements WorkshopService {
 	@Override
 	public boolean participantWithNoWorkshopExists(
 			SortedSet<Participant> participants) {
-		for(Participant p : participants){
-			if(p.getWorkshop() == null){
+		for (Participant p : participants) {
+			if (p.getWorkshop() == null) {
 				return true;
 			}
 		}
@@ -117,8 +164,8 @@ public class WorkshopServiceImpl implements WorkshopService {
 	@Override
 	public void removeChosenWorkshopsFromInterests(
 			SortedSet<Participant> participants) {
-		for(Participant p : participants){
-			if(p.getWorkshop() != null)
+		for (Participant p : participants) {
+			if (p.getWorkshop() != null)
 				p.getWorkshop().getInterestedParticipants().remove(p);
 			p.setWorkshop(null);
 		}
@@ -126,7 +173,7 @@ public class WorkshopServiceImpl implements WorkshopService {
 
 	@Override
 	public void resetWorkshops(Set<Workshop> workshops) {
-		for(Workshop w : workshops){
+		for (Workshop w : workshops) {
 			w.reset();
 		}
 	}
