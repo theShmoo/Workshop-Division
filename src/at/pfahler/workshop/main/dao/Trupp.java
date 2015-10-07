@@ -3,7 +3,7 @@ package at.pfahler.workshop.main.dao;
 /**
  * The trupp of a child
  * 
- * @author David Pfahler <david@pfahler.at>
+ * @author David Pfahler
  */
 public enum Trupp {
 	/**
