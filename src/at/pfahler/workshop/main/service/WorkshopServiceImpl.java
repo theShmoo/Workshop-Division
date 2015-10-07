@@ -15,7 +15,7 @@ import at.pfahler.workshop.main.persistence.PersistenceLoaderCSVImpl;
 /**
  * Implementation of the workshop service layer
  * 
- * @author David Pfahler <david@pfahler.at>
+ * @author David Pfahler
  */
 public class WorkshopServiceImpl implements WorkshopService {
 
