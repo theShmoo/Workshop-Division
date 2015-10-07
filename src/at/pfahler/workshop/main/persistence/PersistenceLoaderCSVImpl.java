@@ -19,7 +19,7 @@ import at.pfahler.workshop.main.utils.Converter;
 /**
  * Class for loading the data and save it to DAOs
  * 
- * @author David Pfahler <david@pfahler.at>
+ * @author David Pfahler
  */
 public class PersistenceLoaderCSVImpl implements PersistanceLoader{
 
