@@ -13,7 +13,7 @@ import at.pfahler.workshop.main.service.WorkshopServiceImpl;
  * 
  * Starts the calculation
  * 
- * @author David Pfahler <david@pfahler.at>
+ * @author David Pfahler
  */
 public class WorkshopDivision {
 
