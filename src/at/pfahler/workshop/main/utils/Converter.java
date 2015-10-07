@@ -10,7 +10,7 @@ import at.pfahler.workshop.main.dao.Trupp;
 /**
  * Converter class
  * 
- * @author David Pfahler <david@pfahler.at>
+ * @author David Pfahler
  */
 public class Converter {
 
@@ -27,7 +27,7 @@ public class Converter {
 			return Trupp.RAUHENSTEIN;
 		case "Rauheneck":
 			return Trupp.RAUHENECK;
-		case "Königshöhle":
+		case "KÃ¶nigshÃ¶hle":
 			return Trupp.KOENIGSHOEHLE;
 		case "Hainburg":
 			return Trupp.HAINBURG;
