@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * Describes a participant to the workshops who voted
  * 
- * @author David Pfahler <david@pfahler.at>
+ * @author David Pfahler
  */
 public class Participant implements Comparable<Participant> {
 
