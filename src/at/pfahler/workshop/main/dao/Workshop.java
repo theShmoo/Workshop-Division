@@ -9,7 +9,7 @@ import java.util.TreeSet;
 /**
  * Describes a workshop
  * 
- * @author David Pfahler <david@pfahler.at>
+ * @author David Pfahler
  */
 public class Workshop {
 	private String name;
