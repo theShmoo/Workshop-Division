@@ -9,7 +9,7 @@ import at.pfahler.workshop.main.dao.Workshop;
 /**
  * Interface for the service layer of the workshop
  * 
- * @author David Pfahler <david@pfahler.at>
+ * @author David Pfahler
  */
 public interface PersistanceLoader {
 
